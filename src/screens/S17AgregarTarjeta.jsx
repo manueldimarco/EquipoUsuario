@@ -105,8 +105,7 @@ const S17AgregarTarjeta=({navigation})=>{
                 <Input actualizarCampo={setCodigo} instructivo="Ver 3 dígitos al dorso" />
             </View>
             <View>
-                {/*<Button habilitado={habilitado} theme="light" text="AÑADIR TARJETA" onPress={enviarTarjetaAlServidor}/>*/}
-                <Button habilitado={habilitado} theme="light" text="AÑADIR TARJETA" onPress={() => navigation.goBack()}/>
+                <Button habilitado={habilitado} theme="light" text="AÑADIR TARJETA" onPress={enviarTarjetaAlServidor}/>
                 <Button habilitado={true} theme="dark" text="VOLVER SIN GUARDAR" onPress={() => navigation.goBack()}/>
             </View>
             

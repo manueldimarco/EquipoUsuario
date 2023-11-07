@@ -79,8 +79,7 @@ const S16CrearReclamo=({route,navigation})=>{
                 />
             </View>
             <View>
-                {/*<Button habilitado={habilitado} theme="light" text="ENVIAR RECLAMO" onPress={enviarReclamoAlServidor}/>*/}
-                <Button habilitado={habilitado} theme="light" text="ENVIAR RECLAMO" onPress={() => navigation.goBack()}/>
+                <Button habilitado={habilitado} theme="light" text="ENVIAR RECLAMO" onPress={enviarReclamoAlServidor}/>
                 <Button habilitado={true} theme="dark" text="VOLVER SIN GUARDAR" onPress={() => navigation.goBack()}/>
             </View>
             

@@ -1,2 +1,2 @@
-const host="https://every-bobcats-hear.loca.lt"
+const host="https://people-delivery-back-production.up.railway.app"
 export default host

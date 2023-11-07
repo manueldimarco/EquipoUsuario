@@ -30,7 +30,7 @@ const S10Configuracion = ({navigation,cerrarSesion}) => {
         </View>
         <View style={style.fila}>
           <BotonConfiguracion imagen={quienesSomosImage} texto="QUIÉNES SOMOS" onPress={() => navigation.navigate('Quienes Somos')}/>
-          <BotonConfiguracion imagen={cerrarSesionImage} texto="CERRAR SESIÓN" onPress={cerrarSesion}/>
+          <BotonConfiguracion imagen={cerrarSesionImage} texto="CERRAR SESIÓN" onPress={cerrarSesion()}/>
         </View>
         <MainButton navigation={navigation}/>
       </View>

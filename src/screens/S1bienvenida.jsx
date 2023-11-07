@@ -42,8 +42,7 @@ const S1bienvenida = ({navigation, iniciarSesion}) => {
     
           if (response.ok) {
             const data = await response.json();
-            guardarToken(data.sessionEnc);
-            iniciarSesion();
+            iniciarSesion(data.sessionEnc);
             console.log('Solicitud exitosa');
             console.log(data.sessionEnc);
           } else {
@@ -67,8 +66,7 @@ const S1bienvenida = ({navigation, iniciarSesion}) => {
                         <Text style={{paddingBottom:10,fontSize:16}}>¿Olvidó su contraseña?</Text>
                     </TouchableOpacity>
                 </View>
-                {/*<Button habilitado={habilitado} theme="light" text="INGRESAR" onPress={enviarDatosAlServidor}/>*/}
-                <Button habilitado={habilitado} theme="light" text="INGRESAR" onPress={() => iniciarSesion('2727')}/>
+                <Button habilitado={habilitado} theme="light" text="INGRESAR" onPress={enviarDatosAlServidor}/>
             </View>
             <View style={{ alignItems: "center" }}>
                 <Text>¿Primera vez con People Delivery?</Text>

@@ -219,8 +219,7 @@ const S12DireccionPorDefecto = ({ navigation }) => {
                 </Mapbox.MapView>
             )}
             <View style={styles.confirmContainer}>
-                {/*<Button title='Confirmar' text='CONFIRMAR' habilitado={confirmEnabled} onPress={() => actualizarDireccion()} />*/}
-                <Button title='Confirmar' text='CONFIRMAR' habilitado={confirmEnabled} onPress={() => navigation.navigate('Origen')} />
+                <Button title='Confirmar' text='CONFIRMAR' habilitado={confirmEnabled} onPress={() => actualizarDireccion()} />
                 <Button title='Volver' theme='dark' text='VOLVER' habilitado={true} onPress={() => navigation.goBack()}/>
             </View>
             <Modal style={{alignItems:'center'}} isVisible={IsModalVisible} onBackdropPress={cerrarModal}>

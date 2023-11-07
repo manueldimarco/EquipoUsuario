@@ -18,9 +18,9 @@ const S11Perfil = ({ navigation}) => {
     const [mailUsuario, setMailUsuario] = useState('usuario@gmail.com');
     const [direccion, setDireccion] = useState('Av San Martín 99');
     
-    /*useEffect(() => {
+    useEffect(() => {
       obtenerDatosUsuario();
-    }, []);*/
+    }, []);
 
     const obtenerDatosUsuario = async () => {
       try {

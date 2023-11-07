@@ -15,9 +15,9 @@ const S13Tarjetas = ({navigation,actualizarTarjeta,tarjetaSeleccionada}) => {
   console.log(token);
   const [tarjetas, setTarjetas] = useState([]);
 
-  /*useEffect(() => {
+  useEffect(() => {
     obtenerTarjetas();
-  }, []);*/
+  }, []);
   
   const obtenerTarjetas = async () => {
       try {

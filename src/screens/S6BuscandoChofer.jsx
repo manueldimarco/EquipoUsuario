@@ -69,7 +69,7 @@ const S6BuscandoChofer = ({ route, navigation }) => {
       </View>
       <View>
         <Button habilitado={true} theme="light" text="AVANZAR" onPress={() => toResumen()} />
-        <Button habilitado={true} theme="dark" text="CANCELAR" onPress={() => toResumen()} />
+        <Button habilitado={true} theme="dark" text="CANCELAR" onPress={enviarViajeAlServidor} />
       </View>
       <Modal style={{alignItems:'center'}} isVisible={IsModalVisible} onBackdropPress={cerrarModal}>
           <View style={style.modalContainer}>

@@ -38,9 +38,9 @@ const S14Reclamos = ({navigation}) => {
       }
     };
 
-    /*useEffect(() => {
+    useEffect(() => {
       obtenerReclamos();
-    }, []);*/
+    }, []);
 
     const toCrearReclamo = () => {
       navigation.navigate('Crear Reclamo', {

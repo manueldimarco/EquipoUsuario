@@ -32,7 +32,7 @@ const S4aMapaOrigen = ({navigation}) => {
       setIsModalVisible(true);
     }
   }
-  /*const obtenerDireccion = async () => {
+  const obtenerDireccion = async () => {
     try {
       const response = await fetch(host + '/user-int/v1/users', {
         method: 'GET',
@@ -51,7 +51,7 @@ const S4aMapaOrigen = ({navigation}) => {
     } catch (error) {
       console.error('Error:', error);
     }
-  };*/
+  };
 
   //Coordenadas CABA para la proximidad
   const coordsCABA = '-34.61315,-58.37723';
@@ -187,10 +187,10 @@ const S4aMapaOrigen = ({navigation}) => {
     }
   }
 
-  /*obtenerDireccion()
+  obtenerDireccion()
   .then(() => {
     geocodingAddress();
-  })*/
+  })
 
   //Navegación con parámetros
   const toMapaDestino = () => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text,TouchableOpacity} from 'react-native';
 import Mapbox from '@rnmapbox/maps';
 import * as Location from 'expo-location';
 import { Icon } from 'react-native-elements'
@@ -20,7 +20,7 @@ const S4bMapaDestino = ({ route, navigation }) => {
   const [token, setToken] = useState('');
   
   SecureStore.getItemAsync("token").then((token) => setToken(token));
-  console.log(token);
+  console.log("token: "+token);
   const { originText, latOrigin, longOrigin, homeLat, homeLong } = route.params;
 
   const [existHome, setExistHome] = useState(false);
@@ -30,7 +30,7 @@ const S4bMapaDestino = ({ route, navigation }) => {
 
   //Ubicación inicial (obtenida del dispositivo)
   const [location, setLocation] = useState(null);
-  const [codigoViaje, setCodigoViaje] = useState("");
+  
   //Latitud y longitud de las ubicaciones seleccionadas
   const [latDestination, setLatDestination] = useState(0);
   const [longDestination, setLongDestination] = useState(0);
@@ -217,10 +217,9 @@ const S4bMapaDestino = ({ route, navigation }) => {
 
       if (response.ok) {
         const data = await response.json();
-        setCodigoViaje(data.code);
         toOpcionesViaje(data.code);
         console.log('Solicitud exitosa');
-        console.log(data.code);
+        console.log("COD VIAJE: "+data.code);
       } else {
         Alert('No se pudo crear el viaje');
       }
@@ -297,8 +296,7 @@ const S4bMapaDestino = ({ route, navigation }) => {
         </Mapbox.MapView>
       )}
       <View style={styles.navContainer}>
-        {/*<Button title='Confirmar' text='CONFIRMAR DESTINO' habilitado={true} onPress={enviarViajeAlServidor} />*/}
-        <Button title='Confirmar' text='CONFIRMAR DESTINO' habilitado={true} onPress={()=>toOpcionesViaje('2222')} />
+        <Button title='Confirmar' text='CONFIRMAR DESTINO' habilitado={true} onPress={enviarViajeAlServidor} />
         <MainButton navigation={navigation}/>
       </View>
       <Modal style={{alignItems:'center'}} isVisible={IsModalVisible} onBackdropPress={()=>setIsModalVisible(false)}>

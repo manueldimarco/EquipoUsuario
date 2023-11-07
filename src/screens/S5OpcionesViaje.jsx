@@ -23,7 +23,7 @@ const S5OpcionesViaje = ({route, navigation,tarjetaSeleccionada}) => {
     const [metodoDePago, setMetodoDePago] = useState("efectivo"); 
     const [numeroTarjeta, setNumeroTarjeta] = useState("");
     const [IsModalVisible, setIsModalVisible] = useState(false);
-    console.log('codigo'+codigoViaje);
+    
     const mostrarModal = () => {
         setIsModalVisible(true);
     };
@@ -221,8 +221,7 @@ const S5OpcionesViaje = ({route, navigation,tarjetaSeleccionada}) => {
             </ScrollView>
             <View style={style.buttonContainer}>
                 <Button habilitado={true} theme="light" text="CONFIRMAR" onPress={() => toBuscandoChofer()}/>
-                {/*<Button habilitado={true} theme="dark" text="CANCELAR" onPress={enviarViajeAlServidor}/>*/}
-                <Button habilitado={true} theme="dark" text="CANCELAR" onPress={() => toBuscandoChofer()}/>
+                <Button habilitado={true} theme="dark" text="CANCELAR" onPress={enviarViajeAlServidor}/>
             </View>
             
             <Modal style={{alignItems:'center'}} isVisible={IsModalVisible} onBackdropPress={cerrarModal}>
