@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import Mapbox from '@rnmapbox/maps';
 import * as Location from 'expo-location';
 import { Icon } from 'react-native-elements'
@@ -8,18 +8,30 @@ import Button from "../components/Button";
 import MainButton from '../components/MainButton';
 import Constants from 'expo-constants';
 import * as SecureStore from 'expo-secure-store';
+import Modal from 'react-native-modal';
+import Logotipo from '../components/Logotipo';
 import host from '../../host';
 
 //Token de aceeso a Mapbox
 Mapbox.setAccessToken('pk.eyJ1IjoidmVyY2UiLCJhIjoiY2xtZmcxdmhiMDBtdzNyc2VnMDM0NWx4NiJ9.CUQzx8BsTEkrATJeiMZ4VA');
 
 const S4aMapaOrigen = ({navigation}) => {
+  const [IsModalVisible, setIsModalVisible] = useState(false);
   
   const [token, setToken] = useState('');
   
   SecureStore.getItemAsync("token").then((token) => setToken(token));
   console.log(token);
 
+  const [existHome, setExistHome] = useState(false);
+
+  const handleExistsHome=()=>{
+    if(existHome){
+      handleHomePress();
+    } else{
+      setIsModalVisible(true);
+    }
+  }
   /*const obtenerDireccion = async () => {
     try {
       const response = await fetch(host + '/user-int/v1/users', {
@@ -152,6 +164,11 @@ const S4aMapaOrigen = ({navigation}) => {
 
 /*   geocodingAddress(); */
 
+  const goHome=()=>{
+    navigation.navigate('Direccion Por Defecto');
+    setIsModalVisible(false);
+  }
+
   //Obtener punto de interés (nombre) a partir de las coordenadas
   const reverseGeocoding = async (lat, long) => {
     try {
@@ -233,7 +250,7 @@ const S4aMapaOrigen = ({navigation}) => {
         <Text style={styles.text} >Utilizar mi ubicación actual</Text>
       </View>
       <View style={styles.overlayContainer3}>
-        <Icon name="home" type='font-awesome' size={40} color='black' onPress={() => handleHomePress()} />
+        <Icon name="home" type='font-awesome' size={40} color='black' onPress={() => handleExistsHome()} />
         <Text style={styles.text} >Utilizar mi ubicación guardada</Text>
       </View>
       {location && (
@@ -281,6 +298,24 @@ const S4aMapaOrigen = ({navigation}) => {
         <Button title='Confirmar' text='CONFIRMAR ORIGEN' habilitado={true} onPress={() => toMapaDestino()} />
         <MainButton navigation={navigation}/>
       </View>
+      <Modal style={{alignItems:'center'}} isVisible={IsModalVisible} onBackdropPress={()=>setIsModalVisible(false)}>
+          <View style={styles.modalContainer}>
+              <Logotipo/>
+              <Text style={styles.modalText}>No tienes una ubicación por defecto guardada. ¿Quieres establecer una ubicación por defecto?</Text>
+              <View style={styles.botonesModal}>
+                <TouchableOpacity onPress={()=>goHome()}>
+                  <View style={[styles.boton,{backgroundColor:"#6372ff"}]}>
+                    <Text style={{color:'black',fontSize:18}}>SI</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>setIsModalVisible(false)}>
+                  <View style={[styles.boton,{backgroundColor:"black"}]}>
+                    <Text style={{color:'white',fontSize:18}}>NO</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+          </View>
+      </Modal>  
     </View>
   );
 }
@@ -344,4 +379,35 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
+    modalText: {
+        color:'#6372ff',
+        fontSize:20,
+        textAlign:"center",
+        marginVertical:20,
+        marginHorizontal:-15,
+        fontWeight:"bold"
+    },
+    modalContainer:{
+        padding:15,
+        justifyContent: 'center', 
+        alignItems: 'center',
+        backgroundColor:'white',
+        borderColor:'#6372ff',
+        borderWidth:5,
+        borderRadius:30
+    },
+    botonesModal:{
+      flexDirection:"row",
+      alignItems:"center",
+      justifyContent:"space-around",
+      marginHorizontal:10    
+    },
+    boton:{
+      borderRadius:40,
+      borderColor:'black',
+      borderWidth:2,
+      paddingVertical:10,
+      paddingHorizontal:25,
+      margin:5
+    }
 });

@@ -9,17 +9,21 @@ import MainButton from '../components/MainButton';
 import Constants from 'expo-constants';
 import * as SecureStore from 'expo-secure-store';
 import host from '../../host';
+import Modal from 'react-native-modal';
+import Logotipo from '../components/Logotipo';
 
 //Token de aceeso a Mapbox
 Mapbox.setAccessToken('pk.eyJ1IjoidmVyY2UiLCJhIjoiY2xtZmcxdmhiMDBtdzNyc2VnMDM0NWx4NiJ9.CUQzx8BsTEkrATJeiMZ4VA');
 
 const S4bMapaDestino = ({ route, navigation }) => {
-  
+  const [IsModalVisible, setIsModalVisible] = useState(false);
   const [token, setToken] = useState('');
   
   SecureStore.getItemAsync("token").then((token) => setToken(token));
   console.log(token);
   const { originText, latOrigin, longOrigin, homeLat, homeLong } = route.params;
+
+  const [existHome, setExistHome] = useState(false);
 
   //Coordenadas CABA para la proximidad
   const coordsCABA = '-34.61315,-58.37723';
@@ -297,6 +301,24 @@ const S4bMapaDestino = ({ route, navigation }) => {
         <Button title='Confirmar' text='CONFIRMAR DESTINO' habilitado={true} onPress={()=>toOpcionesViaje('2222')} />
         <MainButton navigation={navigation}/>
       </View>
+      <Modal style={{alignItems:'center'}} isVisible={IsModalVisible} onBackdropPress={()=>setIsModalVisible(false)}>
+          <View style={styles.modalContainer}>
+              <Logotipo/>
+              <Text style={styles.modalText}>No tienes una ubicación por defecto guardada. ¿Quieres establecer una ubicación por defecto?</Text>
+              <View style={styles.botonesModal}>
+                <TouchableOpacity onPress={()=>goHome()}>
+                  <View style={[styles.boton,{backgroundColor:"#6372ff"}]}>
+                    <Text style={{color:'black',fontSize:18}}>SI</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>setIsModalVisible(false)}>
+                  <View style={[styles.boton,{backgroundColor:"black"}]}>
+                    <Text style={{color:'white',fontSize:18}}>NO</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+          </View>
+      </Modal>  
     </View>
   );
 }
@@ -360,4 +382,35 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
+  modalText: {
+      color:'#6372ff',
+      fontSize:20,
+      textAlign:"center",
+      marginVertical:20,
+      marginHorizontal:-15,
+      fontWeight:"bold"
+  },
+  modalContainer:{
+      padding:15,
+      justifyContent: 'center', 
+      alignItems: 'center',
+      backgroundColor:'white',
+      borderColor:'#6372ff',
+      borderWidth:5,
+      borderRadius:30
+  },
+botonesModal:{
+  flexDirection:"row",
+  alignItems:"center",
+  justifyContent:"space-around",
+  marginHorizontal:10    
+},
+boton:{
+  borderRadius:40,
+  borderColor:'black',
+  borderWidth:2,
+  paddingVertical:10,
+  paddingHorizontal:25,
+  margin:5
+}
 });
