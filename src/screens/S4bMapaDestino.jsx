@@ -234,6 +234,7 @@ const S4bMapaDestino = ({ route, navigation }) => {
           actualizarCampo={setSearchDestination}
           instructivo="Destino"
           searchOrigin={searchDestination}
+          onSubmitEditing={() => geocodingDestino()}
         />
         <Icon name="arrow-circle-down" type='font-awesome' size={50} color='red' onPress={() => geocodingDestino()} />
       </View>

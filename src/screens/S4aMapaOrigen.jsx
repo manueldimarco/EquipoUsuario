@@ -28,9 +28,7 @@ const S4aMapaOrigen = ({ navigation }) => {
   const [homeAddress, setHomeAddress] = useState('');
   const [homeLong, setHomeLong] = useState(0);
   const [homeLat, setHomeLat] = useState(0);
-  console.log('homeAddress: ' + homeAddress);
-  console.log('homeLat: ' + homeLat);
-  console.log('homeLong: ' + homeLong);
+
   //Ubicación inicial (obtenida del dispositivo)
   const [location, setLocation] = useState(null);
 
@@ -236,6 +234,7 @@ const S4aMapaOrigen = ({ navigation }) => {
           actualizarCampo={setSearchOrigin}
           instructivo="Origen"
           searchOrigin={searchOrigin}
+          onSubmitEditing={() => geocoding()}
         />
         <Icon name="arrow-circle-up" type='font-awesome' size={50} color='green' onPress={() => geocoding()} />
       </View>

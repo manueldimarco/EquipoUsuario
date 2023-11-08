@@ -18,7 +18,10 @@ const Searchbar = (props) => {
                 placeholder={props.instructivo}
                 placeholderTextColor="gray"
                 onChangeText={(text) => actualizarDatos(text)}
-                value={props.searchOrigin} />
+                value={props.searchOrigin}
+                returnKeyType={Platform.OS === 'ios' ? 'search' : 'search'} // Cambiar a 'go' si es más apropiado
+                onSubmitEditing={props.onSubmitEditing}
+            />
         </View>
     )
 }

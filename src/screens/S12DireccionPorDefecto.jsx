@@ -177,6 +177,7 @@ const S12DireccionPorDefecto = ({ navigation }) => {
                     actualizarCampo={setSearch}
                     instructivo="Dirección por defecto"
                     searchOrigin={search}
+                    onSubmitEditing={() => geocoding()}
                 />
                 <Icon name="home" type='font-awesome' size={50} color='red' onPress={() => geocoding()} />
             </View>
