@@ -43,7 +43,6 @@ const S1bienvenida = ({navigation, iniciarSesion}) => {
           if (response.ok) {
             const data = await response.json();
             iniciarSesion(data.sessionEnc);
-            console.log('Solicitud exitosa');
             console.log(data.sessionEnc);
           } else {
             console.error('Usuario y/o contraseña incorrectos');

@@ -13,7 +13,6 @@ const S16CrearReclamo=({route,navigation})=>{
     
     const [token, setToken] = useState('');
     SecureStore.getItemAsync("token").then((token) => setToken(token));
-    console.log(token);
 
     const { tipo,codigoViaje,origin,destination,distancia,chofer } = route.params;
     const [nombre,setNombre]=useState("");
@@ -56,7 +55,6 @@ const S16CrearReclamo=({route,navigation})=>{
           if (response.ok) {
             const data = await response.json();
             mostrarModal();
-            console.log('Solicitud exitosa');
           } else {
             console.error('Error al cargar reclamo');
             Alert('Error al cargar reclamo.Intente nuevamente');

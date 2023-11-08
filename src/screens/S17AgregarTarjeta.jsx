@@ -13,7 +13,6 @@ const S17AgregarTarjeta=({navigation})=>{
 
     const [token, setToken] = useState('');
     SecureStore.getItemAsync("token").then((token) => setToken(token));
-    console.log(token);
 
     const [operadora,setOperadora]=useState("");
     const [numero,setNumero]=useState("");
@@ -77,10 +76,8 @@ const S17AgregarTarjeta=({navigation})=>{
           if (response.ok) {
             const data = await response.json();
             mostrarModal();
-            console.log('Solicitud exitosa');
           } else {
             console.error('No se pudo registrar la tarjeta');
-            console.log(token);
             Alert('No se pudo registrar la tarjeta');
           }
         } catch (error) {

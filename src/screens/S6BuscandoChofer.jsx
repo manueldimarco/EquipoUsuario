@@ -11,7 +11,7 @@ const S6BuscandoChofer = ({ route, navigation }) => {
 
   const [token, setToken] = useState('');
   SecureStore.getItemAsync("token").then((token) => setToken(token));
-  console.log(token);
+  
   const {codigoViaje,origin, destination ,precio,distancia,movilidadReducida,metodoDePago,nroTarjeta} = route.params;
   console.log(codigoViaje);
   const [IsModalVisible, setIsModalVisible] = useState(false);
@@ -52,7 +52,6 @@ const S6BuscandoChofer = ({ route, navigation }) => {
           if (response.ok) {
             const data = await response.json();
             mostrarModal();
-            console.log('Solicitud exitosa');
           } else {
             alert('No se pudo cancelar el viaje');
           }

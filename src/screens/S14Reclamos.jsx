@@ -12,7 +12,6 @@ const S14Reclamos = ({navigation}) => {
     
   const [token, setToken] = useState('');
   SecureStore.getItemAsync("token").then((token) => setToken(token));
-  console.log(token);
   
   const [reclamos, setReclamos] = useState([]);
 

@@ -18,7 +18,7 @@ const S5OpcionesViaje = ({route, navigation,tarjetaSeleccionada}) => {
     
     const [token, setToken] = useState('');
     SecureStore.getItemAsync("token").then((token) => setToken(token));
-    console.log(token);
+    
     const [enEfectivo, setEnEfectivo] = useState(true);
     const [metodoDePago, setMetodoDePago] = useState("efectivo"); 
     const [numeroTarjeta, setNumeroTarjeta] = useState("");
@@ -134,7 +134,6 @@ const S5OpcionesViaje = ({route, navigation,tarjetaSeleccionada}) => {
           if (response.ok) {
             const data = await response.json();
             mostrarModal();
-            console.log('Solicitud exitosa');
           } else {
             alert('No se pudo cancelar el viaje');
           }

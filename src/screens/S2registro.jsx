@@ -60,7 +60,6 @@ const S2registro=({navigation})=>{
           });
     
           if (response.ok) {
-            console.log('Registro exitoso');
             mostrarModal();
           } else {
             alert('Este mail ya está registrado');

@@ -15,7 +15,6 @@ const S12DireccionPorDefecto = ({ navigation }) => {
     
     const [token, setToken] = useState('');
     SecureStore.getItemAsync("token").then((token) => setToken(token));
-    console.log(token);
     
     const [IsModalVisible, setIsModalVisible] = useState(false);
 
@@ -30,7 +29,6 @@ const S12DireccionPorDefecto = ({ navigation }) => {
     const [longDestination, setLongDestination] = useState(0);
 
     const [homeName, setHomeName] = useState('');
-    
     const [showHome, setShowHome] = useState(false);
 
     const [confirmEnabled, setConfirmEnabled] = useState(false);
@@ -57,8 +55,6 @@ const S12DireccionPorDefecto = ({ navigation }) => {
                 console.error('Permission to access location was denied');
                 return;
             }
-            /*       const currentLocation = await Location.getCurrentPositionAsync({});
-                  setLocation(currentLocation.coords); */
             try {
                 const currentLocation = await getCurrentLocation();
                 setLocation(currentLocation.coords);
@@ -166,7 +162,6 @@ const S12DireccionPorDefecto = ({ navigation }) => {
           if (response.ok) {
             const data = await response.json();
             mostrarModal();
-            console.log('Direccion actualizada');
           } else {
             Alert('No se pudo actualizar dirección. Intente nuevamente');
           }

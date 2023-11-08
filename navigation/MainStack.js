@@ -50,7 +50,7 @@ const MainStack = (props) => {
                             {(props) => <S4aMapaOrigen {...props}/>}
                         </Stack.Screen>
                         <Stack.Screen name = 'Destino' component = {S4bMapaDestino}/>
-                        <Stack.Screen name='OpcionesViaje'>
+                        <Stack.Screen name = 'OpcionesViaje'>
                             {(props) => <S5OpcionesViaje {...props} tarjetaSeleccionada={tarjetaSeleccionada}/>}
                         </Stack.Screen>
                         <Stack.Screen name = 'BuscandoChofer' component = {S6BuscandoChofer}/>

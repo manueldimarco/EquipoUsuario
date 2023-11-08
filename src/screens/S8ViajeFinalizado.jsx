@@ -11,7 +11,7 @@ const S8ViajeFinalizado = ({ route, navigation }) => {
 
   const [token, setToken] = useState('');
   SecureStore.getItemAsync("token").then((token) => setToken(token));
-  console.log(token);
+  
   //Parámetros recibidos
   const { codigoViaje,origin, destination,precio,distancia,movilidadReducida,metodoDePago,nroTarjeta,chofer } = route.params;
   const [IsModalVisible, setIsModalVisible] = useState(false);
@@ -98,7 +98,6 @@ const S8ViajeFinalizado = ({ route, navigation }) => {
         if (response.ok) {
           const data = await response.json();
           mostrarModal();
-          console.log('Solicitud exitosa');
         } else {
           Alert('No se pudo guardar el viaje. Intente nuevamente');
         }

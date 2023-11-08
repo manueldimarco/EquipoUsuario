@@ -20,7 +20,7 @@ const S4bMapaDestino = ({ route, navigation }) => {
   const [token, setToken] = useState('');
   
   SecureStore.getItemAsync("token").then((token) => setToken(token));
-  console.log("token: "+token);
+  
   const { originText, latOrigin, longOrigin, homeLat, homeLong } = route.params;
 
   const [existHome, setExistHome] = useState(false);
@@ -218,7 +218,6 @@ const S4bMapaDestino = ({ route, navigation }) => {
       if (response.ok) {
         const data = await response.json();
         toOpcionesViaje(data.code);
-        console.log('Solicitud exitosa');
         console.log("COD VIAJE: "+data.code);
       } else {
         Alert('No se pudo crear el viaje');
