@@ -116,8 +116,8 @@ const S7Resumen = ({ route, navigation}) => {
       </ScrollView>
 
       <View style={{marginBottom:-30}}>
-        <Button habilitado={true} text="Simular viaje" onPress={() => toViajeFinalizado()} />
-        <Button habilitado={true} text="Cancelar viaje" theme="dark" onPress={enviarViajeAlServidor} />
+        <Button habilitado={true} text="SIMULAR VIAJE" onPress={() => toViajeFinalizado()} />
+        <Button habilitado={true} text="CANCELAR VIAJE" theme="dark" onPress={enviarViajeAlServidor} />
       </View>
       <Modal style={{alignItems:'center'}} isVisible={IsModalVisible} onBackdropPress={cerrarModal}>
           <View style={style.modalContainer}>
