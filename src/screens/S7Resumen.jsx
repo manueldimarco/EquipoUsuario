@@ -116,7 +116,7 @@ const S7Resumen = ({ route, navigation }) => {
         </View>
       </ScrollView>
 
-      <View style={{ marginBottom: -30 }}>
+      <View style={{marginBottom:-30}}>
         <Button habilitado={true} text="SIMULAR VIAJE" onPress={() => toViajeFinalizado()} />
         <Button habilitado={true} text="CANCELAR VIAJE" theme="dark" onPress={enviarViajeAlServidor} />
       </View>
