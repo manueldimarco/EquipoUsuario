@@ -57,7 +57,7 @@ const S16CrearReclamo=({route,navigation})=>{
             mostrarModal();
           } else {
             console.error('Error al cargar reclamo');
-            Alert('Error al cargar reclamo.Intente nuevamente');
+            alert('Error al cargar reclamo.Intente nuevamente');
           }
         } catch (error) {
           console.error('Error:', error);
