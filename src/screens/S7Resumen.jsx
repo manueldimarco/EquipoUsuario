@@ -17,12 +17,12 @@ const S7Resumen = ({ route, navigation }) => {
   SecureStore.getItemAsync("token").then((token) => setToken(token));
 
   console.log(codigoViaje);
-  /*   const chofer = {
+  const mockChofer = {
       nombre: 'Braulio',
       apellido:'Pérez',
       vehiculo: 'Peugeot 207 negro',
       patente: 'AB123CD'
-    } */
+    } 
 
   const mostrarModal = () => {
     setIsModalVisible(true);
@@ -43,7 +43,7 @@ const S7Resumen = ({ route, navigation }) => {
       movilidadReducida: movilidadReducida,
       metodoDePago: metodoDePago,
       nroTarjeta: nroTarjeta,
-      chofer: chofer
+      chofer: mockChofer
     })
   }
 
@@ -75,28 +75,28 @@ const S7Resumen = ({ route, navigation }) => {
       <Logotipo />
       <View style={style.cartel}>
         <Text style={style.big}>¡VIAJE CONFIRMADO!</Text>
-        <Text style={style.subtitulo}>{chofer.nombre} está en camino...</Text>
+        <Text style={style.subtitulo}>{mockChofer.nombre} está en camino...</Text>
       </View>
 
       <ScrollView contentContainerStyle={style.scroll}>
         <View style={style.container}>
           <View style={style.texto}>
             <Text style={style.titulo}>Viajás con...</Text>
-            <Text style={style.info}>{chofer.nombre} {chofer.apellido}</Text>
+            <Text style={style.info}>{mockChofer.nombre} {mockChofer.apellido}</Text>
           </View>
           <Image source={require("../../assets/perfilChofer.png")} />
         </View>
         <View style={style.container}>
           <View style={style.texto}>
             <Text style={style.titulo}>Vehículo</Text>
-            <Text style={style.info}>{chofer.vehiculo}</Text>
+            <Text style={style.info}>{mockChofer.vehiculo}</Text>
           </View>
           <Image source={require("../../assets/autito.png")} />
         </View>
         <View style={style.container}>
           <View style={style.texto}>
             <Text style={style.titulo}>Patente</Text>
-            <Text style={style.info}>{chofer.patente}</Text>
+            <Text style={style.info}>{mockChofer.patente}</Text>
           </View>
           <Image source={require("../../assets/patente.png")} />
         </View>
