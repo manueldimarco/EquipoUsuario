@@ -130,12 +130,11 @@ const S4bMapaDestino = ({ route, navigation }) => {
   }
 
   //Navegación con parámetros (para hacer reverseGeocoding en el resumen)
-  const toOpcionesViaje = (codigo) => {
+  const toOpcionesViaje = () => {
     if (latDestination === 0) {
       alert('Ingrese un punto de destino')
     } else {
       navigation.navigate('OpcionesViaje', {
-        codigoViaje:codigo,
         latOrigin: latOrigin,
         longOrigin: longOrigin,
         latDestination: latDestination,
@@ -256,35 +255,6 @@ const S4bMapaDestino = ({ route, navigation }) => {
     navigation.navigate('Direccion Por Defecto');
     setIsModalVisible(false);
   }
-  
-  const enviarViajeAlServidor = async () => {
-    const datos = {
-      from: originText,
-      since: searchDestination,
-      distance:(geoDistance(latOrigin, longOrigin, latDestination, longDestination)).toFixed(2),
-    };
-
-    try {
-      const response = await fetch(host+'/user-int/trips/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(datos),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        toOpcionesViaje(data.code);
-        console.log("COD VIAJE: "+data.code);
-      } else {
-        Alert('No se pudo crear el viaje');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
 
   return (
     <View style={styles.page}>
@@ -355,7 +325,7 @@ const S4bMapaDestino = ({ route, navigation }) => {
         </Mapbox.MapView>
       )}
       <View style={styles.navContainer}>
-        <Button title='Confirmar' text='CONFIRMAR DESTINO' habilitado={true} onPress={enviarViajeAlServidor} />
+        <Button title='Confirmar' text='CONFIRMAR DESTINO' habilitado={true} onPress={()=>toOpcionesViaje()} />
         <MainButton navigation={navigation}/>
       </View>
       <Modal style={{alignItems:'center'}} isVisible={IsModalVisible} onBackdropPress={()=>setIsModalVisible(false)}>

@@ -37,7 +37,7 @@ const S5OpcionesViaje = ({route, navigation,tarjetaSeleccionada}) => {
     const precioKM = 300;
 
     //Parámetros recibidos
-    const {codigoViaje,latOrigin, longOrigin, latDestination, longDestination} = route.params;
+    const {latOrigin, longOrigin, latDestination, longDestination} = route.params;
     const [originText, setOriginText] = useState('');
     const [destinationText, setDestinationText] = useState('');
 
@@ -107,9 +107,9 @@ const S5OpcionesViaje = ({route, navigation,tarjetaSeleccionada}) => {
         reverseGeocoding(latDestination, longDestination);
     }, [latOrigin, longOrigin, latDestination, longDestination]);
 
-    const toBuscandoChofer = () => {
+    const toBuscandoChofer = (codigo) => {
         navigation.navigate('BuscandoChofer', {
-          codigoViaje:codigoViaje,
+          codigoViaje:codigo,
           origin: originText,
           destination: destinationText,
           precio:(geoDistance(latOrigin, longOrigin, latDestination, longDestination)*precioKM).toFixed(2),
@@ -120,7 +120,40 @@ const S5OpcionesViaje = ({route, navigation,tarjetaSeleccionada}) => {
         })
     }
 
-    const enviarViajeAlServidor = async () => {
+    /*BOTON CONFIRMAR: ENDPOINT NUEVO (POST). Creamos estructura viaje y anunciamos la novedad. Mandamos coordenadas*/
+    const crearViaje = async () => {
+        const datos = {
+          latOrigin: latOrigin,
+          longOrigin:longOrigin,
+          latDestination:latDestination,
+          longDestination:longDestination,
+          distance:(geoDistance(latOrigin, longOrigin, latDestination, longDestination)).toFixed(2),
+        };
+    
+        try {
+          const response = await fetch(host+'/user-int/trips/create', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(datos),
+          });
+    
+          if (response.ok) {
+            const data = await response.json();
+            toBuscandoChofer(data.code);
+            console.log("COD VIAJE: "+data.code);
+          } else {
+            Alert('No se pudo crear el viaje');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };
+
+    /*CANCELAR VIAJE: ENDPOINT VIEJO (PATCH)
+    const cancelarViaje = async () => {
     
         try {
           const response = await fetch(host+'/user-int/trips/cancel/'+codigoViaje+'/trip/CONSULTADO/status', {
@@ -140,7 +173,41 @@ const S5OpcionesViaje = ({route, navigation,tarjetaSeleccionada}) => {
         } catch (error) {
           console.error('Error:', error);
         }
-      };
+      };*/
+
+
+
+    /*CANCELAR VIAJE: ENDPOINT NUEVO (POST)
+    const cancelarViaje = async () => {
+    
+        const datos = {
+          latOrigin: latOrigin,
+          longOrigin:longOrigin,
+          latDestination:latDestination,
+          longDestination:longDestination,
+          distance:(geoDistance(latOrigin, longOrigin, latDestination, longDestination)).toFixed(2),
+        };
+
+        try {
+          const response = await fetch(host+     , {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(datos),
+          });
+    
+          if (response.ok) {
+            const data = await response.json();
+            mostrarModal();
+          } else {
+            alert('No se pudo cancelar el viaje');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      };*/
 
     return (
         <View style={style.screen}>
@@ -219,8 +286,10 @@ const S5OpcionesViaje = ({route, navigation,tarjetaSeleccionada}) => {
                 
             </ScrollView>
             <View style={style.buttonContainer}>
-                <Button habilitado={true} theme="light" text="CONFIRMAR" onPress={() => toBuscandoChofer()}/>
-                <Button habilitado={true} theme="dark" text="CANCELAR" onPress={enviarViajeAlServidor}/>
+                {/*<Button habilitado={true} theme="light" text="CONFIRMAR" onPress={crearViaje}/>*/}
+                <Button habilitado={true} theme="light" text="CONFIRMAR" onPress={() => navigation.navigate("BuscandoChofer")}/>
+                {/* <Button habilitado={true} theme="dark" text="CANCELAR" onPress={cancelarViaje}/>*/}
+                <Button habilitado={true} theme="dark" text="CANCELAR" onPress={() => navigation.navigate("Origen")}/>
             </View>
             
             <Modal style={{alignItems:'center'}} isVisible={IsModalVisible} onBackdropPress={cerrarModal}>
