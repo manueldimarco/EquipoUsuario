@@ -119,6 +119,14 @@ const S4aMapaOrigen = ({ navigation }) => {
     });
   };
 
+  const handleHomePress = () => {
+    moveCamera(homeLong, homeLat);
+    setLatOrigin(homeLat);
+    setLongOrigin(homeLong);
+    setSearchOrigin("Casa");
+    setShowOrigin(true);
+  }
+
   const checkHome = async () => {
     obtenerDireccion();
     geocodingAddress();
@@ -196,9 +204,7 @@ const S4aMapaOrigen = ({ navigation }) => {
       navigation.navigate('Destino', {
         originText: searchOrigin,
         latOrigin: latOrigin,
-        longOrigin: longOrigin,
-        homeLat: homeLat,
-        homeLong: homeLong,
+        longOrigin: longOrigin
       })
     }
   }
@@ -219,13 +225,7 @@ const S4aMapaOrigen = ({ navigation }) => {
     setShowOrigin(true);
   }
 
-  const handleHomePress = () => {
-    moveCamera(homeLong, homeLat);
-    setLatOrigin(homeLat);
-    setLongOrigin(homeLong);
-    setSearchOrigin("Casa");
-    setShowOrigin(true);
-  }
+  
 
   return (
     <View style={styles.page}>

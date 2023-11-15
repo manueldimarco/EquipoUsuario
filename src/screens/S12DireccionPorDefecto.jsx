@@ -43,7 +43,7 @@ const S12DireccionPorDefecto = ({ navigation }) => {
 
     const cerrarModal = () => {
         setIsModalVisible(false);
-        navigation.navigate('Configuracion');
+        navigation.goBack();
     };
 
     //Obtener localización del dispositivo

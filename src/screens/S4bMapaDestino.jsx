@@ -21,9 +21,11 @@ const S4bMapaDestino = ({ route, navigation }) => {
   
   SecureStore.getItemAsync("token").then((token) => setToken(token));
   
-  const { originText, latOrigin, longOrigin, homeLat, homeLong } = route.params;
+  const { originText, latOrigin, longOrigin} = route.params;
 
-  const [existHome, setExistHome] = useState(false);
+  const [homeAddress, setHomeAddress] = useState('');
+  const [homeLong, setHomeLong] = useState(0);
+  const [homeLat, setHomeLat] = useState(0);
 
   //Coordenadas CABA para la proximidad
   const coordsCABA = '-34.61315,-58.37723';
@@ -158,18 +160,6 @@ const S4bMapaDestino = ({ route, navigation }) => {
     setShowDestination(true);
   }
 
-  const handleHomePress = () => {
-    if (homeLat == 0 && homeLong && 0) {
-      alert('No se ingresó una dirección por defecto, seleccione una a continuación')
-    } else {
-    moveCamera(homeLong, homeLat);
-    setLatDestination(homeLat);
-    setLongDestination(homeLong);
-    setSearchDestination('Casa');
-    setShowDestination(true);
-    }
-  }
-
   function geoDistance(lat1, lng1, lat2, lng2){
     const a = 6378.137; // equitorial radius in km
     const b = 6356.752; // polar radius in km
@@ -197,6 +187,75 @@ const S4bMapaDestino = ({ route, navigation }) => {
 
     return sqr(sq(x1-x2)+sq(y1-y2)+sq(z1-z2));
 }
+
+  const handleExistsHome = () => {
+    checkHome().then(() => {
+      if (homeLat === 0 && homeLong === 0) {
+        setIsModalVisible(true);
+      } else {
+        handleHomePress();
+      }
+    });
+  };
+
+  const handleHomePress = () => {
+    moveCamera(homeLong, homeLat);
+    setLatDestination(homeLat);
+    setLongDestination(homeLong);
+    setSearchDestination("Casa");
+    setShowDestination(true);
+  }
+
+  const checkHome = async () => {
+    obtenerDireccion();
+    geocodingAddress();
+  };
+
+  const obtenerDireccion = async () => {
+    try {
+      const response = await fetch(host + '/user-int/v1/users', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setHomeAddress(data.adress);
+      } else {
+        console.error('Error al obtener datos del usuario');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const geocodingAddress = async () => {
+    try {
+      const response = await fetch(
+        'https://api.mapbox.com/geocoding/v5/mapbox.places/' + homeAddress +
+        '.json?proximity=-34.61315,-58.37723&' +
+        'access_token=pk.eyJ1IjoidmVyY2UiLCJhIjoiY2xtZmcxdmhiMDBtdzNyc2VnMDM0NWx4NiJ9.CUQzx8BsTEkrATJeiMZ4VA',
+      );
+      const json = await response.json();
+
+      setHomeLat(json.features[0].center[1]);
+      setHomeLong(json.features[0].center[0]);
+
+      return json;
+    } catch (error) {
+      if (homeAddress === '') {
+        console.log('No se tiene guardada una dirección por defecto');
+      }
+    }
+  };
+
+  const goHome = () => {
+    navigation.navigate('Direccion Por Defecto');
+    setIsModalVisible(false);
+  }
   
   const enviarViajeAlServidor = async () => {
     const datos = {
@@ -243,7 +302,7 @@ const S4bMapaDestino = ({ route, navigation }) => {
         <Text style={styles.text} >Utilizar mi ubicación actual</Text>
       </View>
       <View style={styles.overlayContainer3}>
-        <Icon name="home" type='font-awesome' size={40} onPress={() => handleHomePress()} />
+        <Icon name="home" type='font-awesome' size={40} onPress={() => handleExistsHome()} />
         <Text style={styles.text} >Utilizar mi ubicación guardada</Text>
       </View>
       {location && (
