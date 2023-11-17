@@ -6,7 +6,8 @@ import Modal from 'react-native-modal';
 import Logotipo from "../components/Logotipo";
 import host from '../../host';
 import * as SecureStore from 'expo-secure-store';
-import io from 'socket.io-client';
+import { Client } from '@stomp/stompjs';
+import { TextEncoder, TextDecoder } from 'text-encoding';
 
 const S6BuscandoChofer = ({ route, navigation }) => {
 
@@ -21,24 +22,44 @@ const S6BuscandoChofer = ({ route, navigation }) => {
 
   useEffect(() => {
 
-    // Reemplaza 'http://tu-servidor-socket.io.com' con la dirección de tu servidor Socket.IO
-    const socket = io('https://core-integracion.azurewebsites.net/');
+    // Agregar el polyfill para TextEncoder y TextDecoder
+    if (typeof TextEncoder === 'undefined') {
+      global.TextEncoder = TextEncoder;
+    }
 
-    socket.on('connect', () => {
-      console.log('Conectado al servidor de Socket.IO');
+    if (typeof TextDecoder === 'undefined') {
+      global.TextDecoder = TextDecoder;
+    }
+
+    const socket = new Client({
+      brokerURL: 'wss://people-delivery-back-production.up.railway.app',
+      debug: function (str) {
+        console.log(str);
+      },
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
     });
 
-    // Escucha eventos o envía eventos al servidor
-    socket.on('accepted_trips/', (data) => {
-      console.log('Mensaje recibido:', data);
-      setChofer(data);
-    });
-
-    // Cuando el componente se desmonta, desconecta el socket
-    return () => {
-      socket.disconnect();
-      console.log('Conectado al servidor de Socket.IO finalizada');
+    socket.onConnect = (frame) => {
+      console.log('Conectado al servidor de WebSocket');
+      socket.subscribe('/topic/update', (message) => {
+        console.log('Mensaje recibido:', message.body);
+        setChofer(message.body);
+      });
     };
+
+    socket.onDisconnect = (frame) => {
+      console.log('Desconectado del servidor de WebSocket');
+    };
+
+    socket.activate();
+
+    return () => {
+      socket.deactivate();
+      console.log('Conexión al servidor de WebSocket finalizada');
+    };
+
   }, []);
 
   const mostrarModal = () => {
