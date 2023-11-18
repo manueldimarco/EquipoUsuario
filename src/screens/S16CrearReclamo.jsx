@@ -35,11 +35,10 @@ const S16CrearReclamo=({route,navigation})=>{
 
     const enviarReclamoAlServidor = async () => {
         const datos = {
-          type:tipo,
+          driverName: chofer.nombre+' '+chofer.apellido,
           tripCode:codigoViaje,
           title: nombre,
-          description: descripcion,
-          driverCode: chofer.nombre+' '+chofer.apellido
+          description: descripcion
         };
     
         try {
