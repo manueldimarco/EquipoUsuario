@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet,SafeAreaView } from "react-native";
 import Input from "../components/Input";
+import InputPassword from "../components/InputPassword";
 import usuarioImage from "../../assets/USUARIO.png";
 import passwordImage from "../../assets/PASSWORD.png";
 import Logotipo from "../components/Logotipo";
@@ -60,7 +61,7 @@ const S1bienvenida = ({navigation, iniciarSesion}) => {
             <View>
                 <Input actualizarCampo={setMail} imagen={usuarioImage} instructivo="Mail" />
                 <View>
-                    <Input actualizarCampo={setPassword} imagen={passwordImage} instructivo="Contraseña" />
+                    <InputPassword actualizarCampo={setPassword} imagen={passwordImage} secureTextEntry={true} instructivo="Contraseña" />
                     <TouchableOpacity onPress={() => navigation.navigate('Recupero')}>
                         <Text style={{paddingBottom:10,fontSize:16}}>¿Olvidó su contraseña?</Text>
                     </TouchableOpacity>
