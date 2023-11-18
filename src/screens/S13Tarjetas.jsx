@@ -30,6 +30,7 @@ const S13Tarjetas = ({navigation,actualizarTarjeta,tarjetaSeleccionada}) => {
   
         if (response.ok) {
           const data = await response.json();
+          console.log(data)
           setTarjetas(data);
         } else {
           console.error("Error fetching tarjetas");

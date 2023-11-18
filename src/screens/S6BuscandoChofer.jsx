@@ -22,7 +22,7 @@ const S6BuscandoChofer = ({ route, navigation }) => {
   const [stompClient, setStompClient] = useState(null);
 
   useEffect(() => {
-    const socket = new WebSocket('wss://people-delivery-back-production.up.railway.app/user-int/ws'); // Cambia la URL a tu punto final de WebSocket
+    const socket = new WebSocket('wss://people-delivery-back-production.up.railway.app/user-int/ws');
 
     const stomp = new Client({
       webSocketFactory: () => socket,
@@ -101,12 +101,18 @@ const S6BuscandoChofer = ({ route, navigation }) => {
   return (
     <View style={style.screen}>
       <View>
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text style={style.text}>Buscando Chofer...</Text>
+      {chofer ? (
+          toResumen()
+        ) : (
+          <>
+            <ActivityIndicator size="large" color="#0000ff" />
+            <Text style={style.text}>Buscando Chofer...</Text>
+          </>
+        )}
       </View>
       <View>
         <Button habilitado={true} theme="light" text="AVANZAR" onPress={() => toResumen()} />
-        <Button habilitado={true} theme="dark" text="CANCELAR" onPress={enviarViajeAlServidor} />
+        <Button habilitado={true} theme="dark" text="CANCELAR" onPress={() => enviarViajeAlServidor()} />
       </View>
       <Modal style={{ alignItems: 'center' }} isVisible={IsModalVisible} onBackdropPress={cerrarModal}>
         <View style={style.modalContainer}>

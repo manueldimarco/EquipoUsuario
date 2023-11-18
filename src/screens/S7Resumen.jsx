@@ -6,6 +6,7 @@ import Constants from 'expo-constants';
 import Modal from 'react-native-modal';
 import host from '../../host';
 import * as SecureStore from 'expo-secure-store';
+import { Client } from '@stomp/stompjs';
 
 const S7Resumen = ({ route, navigation }) => {
 
@@ -14,7 +15,38 @@ const S7Resumen = ({ route, navigation }) => {
   const [IsModalVisible, setIsModalVisible] = useState(false);
   const [token, setToken] = useState('');
 
+  const [isTripStarted, setIsTripStarted] = useState(false);
+
   SecureStore.getItemAsync("token").then((token) => setToken(token));
+
+  useEffect(() => {
+    const socket = new WebSocket('wss://people-delivery-back-production.up.railway.app/user-int/ws');
+
+    const stomp = new Client({
+      webSocketFactory: () => socket,
+      onConnect: (frame) => {
+        console.log('Conectado al servidor de WebSocket');
+        stomp.subscribe('/topic/update', (message) => {
+          setIsTripStarted(true);
+        });
+      },
+      onDisconnect: (frame) => {
+        console.log('Desconectado del servidor de WebSocket');
+      },
+      debug: (str) => {
+        console.log(str);
+      },
+    });
+
+    setStompClient(stomp);
+    stomp.activate();
+
+    return () => {
+      if (stompClient) {
+        stompClient.deactivate();
+      }
+    };
+  }, []);
 
   console.log(codigoViaje);
   const mockChofer = {
@@ -43,7 +75,7 @@ const S7Resumen = ({ route, navigation }) => {
       movilidadReducida: movilidadReducida,
       metodoDePago: metodoDePago,
       nroTarjeta: nroTarjeta,
-      chofer: mockChofer
+      chofer: chofer
     })
   }
 
@@ -74,29 +106,28 @@ const S7Resumen = ({ route, navigation }) => {
     <View style={style.screen}>
       <Logotipo />
       <View style={style.cartel}>
-        <Text style={style.big}>¡VIAJE CONFIRMADO!</Text>
-        <Text style={style.subtitulo}>{mockChofer.nombre} está en camino...</Text>
+        <Text style={style.big}>{isTripStarted ? 'VIAJE EN CURSO' : '¡VIAJE CONFIRMADO!'}</Text>
+        <Text style={style.subtitulo}>{isTripStarted ? 'En camino...' : `${chofer.nombre} está en camino...`}</Text>
       </View>
-
       <ScrollView contentContainerStyle={style.scroll}>
         <View style={style.container}>
           <View style={style.texto}>
             <Text style={style.titulo}>Viajás con...</Text>
-            <Text style={style.info}>{mockChofer.nombre} {mockChofer.apellido}</Text>
+            <Text style={style.info}>{chofer.nombre} {chofer.apellido}</Text>
           </View>
           <Image source={require("../../assets/perfilChofer.png")} />
         </View>
         <View style={style.container}>
           <View style={style.texto}>
             <Text style={style.titulo}>Vehículo</Text>
-            <Text style={style.info}>{mockChofer.vehiculo}</Text>
+            <Text style={style.info}>{chofer.vehiculo}</Text>
           </View>
           <Image source={require("../../assets/autito.png")} />
         </View>
         <View style={style.container}>
           <View style={style.texto}>
             <Text style={style.titulo}>Patente</Text>
-            <Text style={style.info}>{mockChofer.patente}</Text>
+            <Text style={style.info}>{chofer.patente}</Text>
           </View>
           <Image source={require("../../assets/patente.png")} />
         </View>
