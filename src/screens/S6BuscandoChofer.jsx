@@ -7,7 +7,6 @@ import Logotipo from "../components/Logotipo";
 import host from '../../host';
 import * as SecureStore from 'expo-secure-store';
 import { Client } from '@stomp/stompjs';
-import { TextEncoder, TextDecoder } from 'text-encoding';
 
 const S6BuscandoChofer = ({ route, navigation }) => {
 
@@ -20,46 +19,37 @@ const S6BuscandoChofer = ({ route, navigation }) => {
 
   const [chofer, setChofer] = useState(null);
 
+  const [stompClient, setStompClient] = useState(null);
+
   useEffect(() => {
+    const socket = new WebSocket('wss://people-delivery-back-production.up.railway.app/user-int/ws'); // Cambia la URL a tu punto final de WebSocket
 
-    // Agregar el polyfill para TextEncoder y TextDecoder
-    if (typeof TextEncoder === 'undefined') {
-      global.TextEncoder = TextEncoder;
-    }
-
-    if (typeof TextDecoder === 'undefined') {
-      global.TextDecoder = TextDecoder;
-    }
-
-    const socket = new Client({
-      brokerURL: 'wss://people-delivery-back-production.up.railway.app',
-      debug: function (str) {
+    const stomp = new Client({
+      webSocketFactory: () => socket,
+      onConnect: (frame) => {
+        console.log('Conectado al servidor de WebSocket');
+        stomp.subscribe('/topic/update', (message) => {
+          const payload = JSON.parse(message.body);
+          const choferData = payload.chofer;
+          setChofer(choferData);
+        });
+      },
+      onDisconnect: (frame) => {
+        console.log('Desconectado del servidor de WebSocket');
+      },
+      debug: (str) => {
         console.log(str);
       },
-      reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
     });
 
-    socket.onConnect = (frame) => {
-      console.log('Conectado al servidor de WebSocket');
-      socket.subscribe('/topic/update', (message) => {
-        console.log('Mensaje recibido:', message.body);
-        setChofer(message.body);
-      });
-    };
-
-    socket.onDisconnect = (frame) => {
-      console.log('Desconectado del servidor de WebSocket');
-    };
-
-    socket.activate();
+    setStompClient(stomp);
+    stomp.activate();
 
     return () => {
-      socket.deactivate();
-      console.log('Conexión al servidor de WebSocket finalizada');
+      if (stompClient) {
+        stompClient.deactivate();
+      }
     };
-
   }, []);
 
   const mostrarModal = () => {
