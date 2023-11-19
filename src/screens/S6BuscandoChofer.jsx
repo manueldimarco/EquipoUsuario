@@ -7,6 +7,7 @@ import Logotipo from "../components/Logotipo";
 import host from '../../host';
 import * as SecureStore from 'expo-secure-store';
 import { Client } from '@stomp/stompjs';
+import 'text-encoding-polyfill'
 
 const S6BuscandoChofer = ({ route, navigation }) => {
 
@@ -25,12 +26,15 @@ const S6BuscandoChofer = ({ route, navigation }) => {
     const socket = new WebSocket('wss://people-delivery-back-production.up.railway.app/user-int/ws');
 
     const stomp = new Client({
+      forceBinaryWSFrames: true,
+      appendMissingNULLonIncoming: true,
       webSocketFactory: () => socket,
       onConnect: (frame) => {
         console.log('Conectado al servidor de WebSocket');
         stomp.subscribe('/topic/update', (message) => {
           const payload = JSON.parse(message.body);
           const choferData = payload.chofer;
+          console.log("chofer: "+choferData)
           setChofer(choferData);
         });
       },

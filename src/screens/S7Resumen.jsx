@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Dimensions, Image, ScrollView } from 'react-native';
 import Logotipo from "../components/Logotipo";
 import Button from "../components/Button";
@@ -107,13 +107,13 @@ const S7Resumen = ({ route, navigation }) => {
       <Logotipo />
       <View style={style.cartel}>
         <Text style={style.big}>{isTripStarted ? 'VIAJE EN CURSO' : '¡VIAJE CONFIRMADO!'}</Text>
-        <Text style={style.subtitulo}>{isTripStarted ? 'En camino...' : `${chofer.nombre} está en camino...`}</Text>
+        <Text style={style.subtitulo}>{isTripStarted ? 'En camino...' : `${chofer.nombreChofer} está en camino...`}</Text>
       </View>
       <ScrollView contentContainerStyle={style.scroll}>
         <View style={style.container}>
           <View style={style.texto}>
             <Text style={style.titulo}>Viajás con...</Text>
-            <Text style={style.info}>{chofer.nombre} {chofer.apellido}</Text>
+            <Text style={style.info}>{chofer.nombreChofer} {chofer.apellidoChofer}</Text>
           </View>
           <Image source={require("../../assets/perfilChofer.png")} />
         </View>
