@@ -71,22 +71,15 @@ const S8ViajeFinalizado = ({ route, navigation }) => {
       chofer: chofer
     })}
 
-    /*const enviarViajeAlServidor = async () => {
+    const enviarCalificacion = async () => {
       const datos = {
-        origin: origin,
-        destination: destination,
-        precio:precio,
-        distancia:distancia,
-        movilidadReducida:movilidadReducida,
-        estado:"Finalizado",
-        metodoDePago:metodoDePago,
-        nroTarjeta:nroTarjeta,
-        chofer:chofer,
-        rating:defaultRating.toString()
+        tripCode: codigoViaje,
+        rating: defaultRating,
+        driverId: chofer.idChofer
       };
   
       try {
-        const response = await fetch('URL', {
+        const response = await fetch(host+'/user-int/v1/reviews', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -99,12 +92,12 @@ const S8ViajeFinalizado = ({ route, navigation }) => {
           const data = await response.json();
           mostrarModal();
         } else {
-          Alert('No se pudo guardar el viaje. Intente nuevamente');
+          Alert('No se pudo enviar calificacion. Intente nuevamente');
         }
       } catch (error) {
         console.error('Error:', error);
       }
-    };*/
+    };
 
   return (
     <View style={style.screen}>
@@ -124,7 +117,7 @@ const S8ViajeFinalizado = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={[style.container,style.buttonContainer]}>
-        <Button habilitado={true} text="CONFIRMAR" theme="light" onPress={mostrarModal} />
+        <Button habilitado={true} text="CONFIRMAR" theme="light" onPress={enviarCalificacion} />
         <Button habilitado={true} text="NO EVALUAR" theme="dark" onPress={mostrarModal} />
       </View>      
       <Modal style={{alignItems:'center'}} isVisible={IsModalVisible} onBackdropPress={cerrarModal}>
