@@ -55,16 +55,15 @@ const S14Reclamos = ({navigation}) => {
           cocaína al detenerse en un semáforo. Luego agarró la General Paz y condució en contramano y marcha atrás" />
           <ItemReclamo titulo="Olor a pescado podrido" fecha="22/9/2023" chofer="Andrés Gómez" descripcion="El chofer deja
           su pesca del día en el asiento de atrás del auto, lo que causa un olor horrible" />
-          {/*{reclamos.map((reclamo, index) => (
+          {reclamos.map((reclamo, index) => (
             <ItemReclamo
               key={index} 
               titulo={reclamo.title}
               fecha={reclamo.createdAt}
               chofer={reclamo.driverName}
-              chofer='Braulio Pérez'
               descripcion={reclamo.description}
             />
-          ))}*/}
+          ))}
         </ScrollView>
         <View style={{marginBottom:-25}}>
           <Button habilitado={true} theme="light" text="CREAR RECLAMO" onPress={() => toCrearReclamo()}/>
