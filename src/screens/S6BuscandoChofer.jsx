@@ -6,8 +6,7 @@ import Modal from 'react-native-modal';
 import Logotipo from "../components/Logotipo";
 import host from '../../host';
 import * as SecureStore from 'expo-secure-store';
-import { Client } from '@stomp/stompjs';
-import 'text-encoding-polyfill'
+import io from 'socket.io-client';
 
 const S6BuscandoChofer = ({ route, navigation }) => {
 
@@ -20,40 +19,21 @@ const S6BuscandoChofer = ({ route, navigation }) => {
 
   const [chofer, setChofer] = useState(null);
 
-  const [stompClient, setStompClient] = useState(null);
 
   useEffect(() => {
-    const socket = new WebSocket('wss://people-delivery-back-production.up.railway.app/user-int/ws');
-
-    const stomp = new Client({
-      forceBinaryWSFrames: true,
-      appendMissingNULLonIncoming: true,
-      webSocketFactory: () => socket,
-      onConnect: (frame) => {
-        console.log('Conectado al servidor de WebSocket');
-        stomp.subscribe('/topic/update', (message) => {
-          const payload = JSON.parse(message.body);
-          const choferData = payload.chofer;
-          console.log("chofer: "+choferData)
-          setChofer(choferData);
-        });
-      },
-      onDisconnect: (frame) => {
-        console.log('Desconectado del servidor de WebSocket');
-      },
-      debug: (str) => {
-        console.log(str);
-      },
+    const socket = io('http://54.208.78.25:3000');
+    socket.on('connect', () => {
+      console.log('Conectado al servidor de Socket.IO');
     });
-
-    setStompClient(stomp);
-    stomp.activate();
-
+    // Escucha eventos o envía eventos al servidor
+    socket.on('acceptedTrip', (data) => {
+      console.log('Mensaje recibido:', data);
+      setChofer(data);
+    });
+    // Cuando el componente se desmonta, desconecta el socket
     return () => {
-      if (stompClient) {
-        stompClient.deactivate();
-      }
-    };
+      socket.disconnect();
+    }
   }, []);
 
   const mostrarModal = () => {
@@ -105,7 +85,7 @@ const S6BuscandoChofer = ({ route, navigation }) => {
   return (
     <View style={style.screen}>
       <View>
-      {chofer ? (
+        {chofer ? (
           toResumen()
         ) : (
           <>

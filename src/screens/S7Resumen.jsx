@@ -6,7 +6,7 @@ import Constants from 'expo-constants';
 import Modal from 'react-native-modal';
 import host from '../../host';
 import * as SecureStore from 'expo-secure-store';
-import { Client } from '@stomp/stompjs';
+import io from 'socket.io-client';
 
 const S7Resumen = ({ route, navigation }) => {
 
@@ -20,41 +20,28 @@ const S7Resumen = ({ route, navigation }) => {
   SecureStore.getItemAsync("token").then((token) => setToken(token));
 
   useEffect(() => {
-    const socket = new WebSocket('wss://people-delivery-back-production.up.railway.app/user-int/ws');
-
-    const stomp = new Client({
-      webSocketFactory: () => socket,
-      onConnect: (frame) => {
-        console.log('Conectado al servidor de WebSocket');
-        stomp.subscribe('/topic/update', (message) => {
-          setIsTripStarted(true);
-        });
-      },
-      onDisconnect: (frame) => {
-        console.log('Desconectado del servidor de WebSocket');
-      },
-      debug: (str) => {
-        console.log(str);
-      },
+    const socket = io('http://54.208.78.25:3000');
+    socket.on('connect', () => {
+      console.log('Conectado al servidor de Socket.IO');
     });
-
-    setStompClient(stomp);
-    stomp.activate();
-
+    // Escucha eventos o envía eventos al servidor
+    socket.on('ongoingTrip', (data) => {
+      console.log('Mensaje recibido:', data);
+      setIsTripStarted(true);
+    });
+    // Cuando el componente se desmonta, desconecta el socket
     return () => {
-      if (stompClient) {
-        stompClient.deactivate();
-      }
-    };
+      socket.disconnect();
+    }
   }, []);
 
   console.log(codigoViaje);
   const mockChofer = {
-      nombre: 'Braulio',
-      apellido:'Pérez',
-      vehiculo: 'Peugeot 207 negro',
-      patente: 'AB123CD'
-    } 
+    nombre: 'Braulio',
+    apellido: 'Pérez',
+    vehiculo: 'Peugeot 207 negro',
+    patente: 'AB123CD'
+  }
 
   const mostrarModal = () => {
     setIsModalVisible(true);
@@ -147,7 +134,7 @@ const S7Resumen = ({ route, navigation }) => {
         </View>
       </ScrollView>
 
-      <View style={{marginBottom:-30}}>
+      <View style={{ marginBottom: -30 }}>
         <Button habilitado={true} text="SIMULAR VIAJE" onPress={() => toViajeFinalizado()} />
         <Button habilitado={true} text="CANCELAR VIAJE" theme="dark" onPress={enviarViajeAlServidor} />
       </View>
