@@ -16,6 +16,7 @@ const S7Resumen = ({ route, navigation }) => {
   const [token, setToken] = useState('');
 
   const [isTripStarted, setIsTripStarted] = useState(false);
+  const [isTripFinished, setIsTripFinished] = useState(false);
 
   SecureStore.getItemAsync("token").then((token) => setToken(token));
 
@@ -29,11 +30,21 @@ const S7Resumen = ({ route, navigation }) => {
       console.log('Mensaje recibido:', data);
       setIsTripStarted(true);
     });
+/*     socket.on('finishedTrip', (data) => {
+      console.log('Mensaje recibido:', data);
+      setIsTripFinished(true);
+    }); */
     // Cuando el componente se desmonta, desconecta el socket
     return () => {
       socket.disconnect();
     }
   }, []);
+
+  useEffect(() => {
+    if (isTripFinished) {
+      toViajeFinalizado();
+    }
+  }, [isTripFinished, navigation]);
 
   console.log(codigoViaje);
   const mockChofer = {
@@ -88,7 +99,6 @@ const S7Resumen = ({ route, navigation }) => {
     }
   };
 
-
   return (
     <View style={style.screen}>
       <Logotipo />
@@ -136,7 +146,7 @@ const S7Resumen = ({ route, navigation }) => {
 
       <View style={{ marginBottom: -30 }}>
         <Button habilitado={true} text="SIMULAR VIAJE" onPress={() => toViajeFinalizado()} />
-        <Button habilitado={true} text="CANCELAR VIAJE" theme="dark" onPress={enviarViajeAlServidor} />
+        {!isTripStarted && <Button habilitado={true} text="CANCELAR VIAJE" theme="dark" onPress={() => enviarViajeAlServidor()} />}
       </View>
       <Modal style={{ alignItems: 'center' }} isVisible={IsModalVisible} onBackdropPress={cerrarModal}>
         <View style={style.modalContainer}>

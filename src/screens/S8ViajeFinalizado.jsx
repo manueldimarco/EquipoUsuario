@@ -5,6 +5,7 @@ import Button from "../components/Button";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Constants from 'expo-constants';
 import Modal from 'react-native-modal';
+import host from '../../host';
 import * as SecureStore from 'expo-secure-store';
 
 const S8ViajeFinalizado = ({ route, navigation }) => {
@@ -92,7 +93,7 @@ const S8ViajeFinalizado = ({ route, navigation }) => {
           const data = await response.json();
           mostrarModal();
         } else {
-          Alert('No se pudo enviar calificacion. Intente nuevamente');
+          alert('No se pudo enviar calificacion. Intente nuevamente');
         }
       } catch (error) {
         console.error('Error:', error);
@@ -107,7 +108,7 @@ const S8ViajeFinalizado = ({ route, navigation }) => {
         <Icon name="flag-checkered" size={120} color="black"/>
       </View>
       <View style={[style.container,{marginBottom:-10}]}>
-        <Text style={style.subtitulo}>Evalúa a {chofer.nombre}</Text>
+        <Text style={style.subtitulo}>Evalúa a {chofer.nombreChofer}</Text>
         <CustomRatingBar/>
         <TouchableOpacity onPress={() => toCrearReclamo()}>
           <View style={style.reclamo}>
@@ -117,7 +118,7 @@ const S8ViajeFinalizado = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={[style.container,style.buttonContainer]}>
-        <Button habilitado={true} text="CONFIRMAR" theme="light" onPress={enviarCalificacion} />
+        <Button habilitado={true} text="CONFIRMAR" theme="light" onPress={() => enviarCalificacion()} />
         <Button habilitado={true} text="NO EVALUAR" theme="dark" onPress={mostrarModal} />
       </View>      
       <Modal style={{alignItems:'center'}} isVisible={IsModalVisible} onBackdropPress={cerrarModal}>
